@@ -1,15 +1,32 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"web"
 )
 
-func main() {
-	m := web.New()
-	m.Get("/", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, "URL.Path = %q\n", req.URL.Path)
+func XmlRespon(c *web.Context) {
+	v := &web.Servers{Version: "1"}
+	v.Svs = append(v.Svs, web.Server{c.PostForm("username"), c.PostForm("password")})
+	v.Svs = append(v.Svs, web.Server{"Beijing_VPN", "127.0.0.2"})
+	c.XmlFmt(http.StatusOK, v)
+}
+
+func JsonRespon(c *web.Context) {
+	c.JsonFmt(http.StatusOK, web.Json{
+		"username": c.PostForm("username"),
+		"password": c.PostForm("password"),
 	})
-	m.ListenServer(":50000")
+}
+
+func main() {
+	server := web.New()
+
+	server.Get("/", func(c *web.Context) {
+		c.StringFmt(http.StatusOK, "hello %s", "world")
+	})
+
+	server.Post("/login", JsonRespon)
+	server.Post("/xml", XmlRespon)
+	server.ListenServer(":50000")
 }

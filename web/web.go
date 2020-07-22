@@ -1,38 +1,37 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
 )
 
 type Handler func(w http.ResponseWriter, r *http.Request)
 
 type Manage struct {
-	conn   string
-	handle Handler
+	route *Route
 }
 
 func New() *Manage {
-	m := new(Manage)
+	m := &Manage{
+		route: NewRoute(),
+	}
 	return m
 }
 
-func (m *Manage) AddReq(method string, path string, handle Handler) {
-	m.conn = method + "-" + path
-	m.handle = handle
+func (m *Manage) AddReq(method string, path string, handle HandleFunc) {
+	m.route.AddRoute(method, path, handle)
 }
 
-func (m *Manage) Get(path string, handle Handler) {
+func (m *Manage) Get(path string, handle HandleFunc) {
 	m.AddReq("GET", path, handle)
 }
 
+func (m *Manage) Post(path string, handle HandleFunc) {
+	m.AddReq("POST", path, handle)
+}
+
 func (m *Manage) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	conn := req.Method + "-" + req.URL.Path
-	if m.conn == conn {
-		m.handle(w, req)
-	} else {
-		fmt.Fprintf(w, "404 NOT FOUND: %s\n", req.URL)
-	}
+	context := NewContext(w, req)
+	m.route.Handle(context)
 }
 
 func (m *Manage) ListenServer(addr string) error {
