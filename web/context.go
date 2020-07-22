@@ -25,7 +25,13 @@ type Context struct {
 	Req    *http.Request
 	Path   string
 	Method string
+	Params map[string]string
 	Status int
+}
+
+func (c *Context) Param(key string) string {
+	value, _ := c.Params[key]
+	return value
 }
 
 func NewContext(w http.ResponseWriter, req *http.Request) *Context {
@@ -42,7 +48,6 @@ func (c *Context) PostForm(key string) string {
 	return value
 }
 
-//获取get参数对应key-value
 func (c *Context) Query(key string) string {
 	value := c.Req.URL.Query().Get(key)
 	return value

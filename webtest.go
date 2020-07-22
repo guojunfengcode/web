@@ -19,6 +19,10 @@ func JsonRespon(c *web.Context) {
 	})
 }
 
+func PatternRespon(c *web.Context) {
+	c.StringFmt(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
+}
+
 func main() {
 	server := web.New()
 
@@ -28,5 +32,6 @@ func main() {
 
 	server.Post("/login", JsonRespon)
 	server.Post("/xml", XmlRespon)
+	server.Get("/hello/:name", PatternRespon)
 	server.ListenServer(":50000")
 }
