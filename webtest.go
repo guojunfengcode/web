@@ -51,34 +51,6 @@ func HtmlRespon(c *web.Context) {
 	</html>`)
 }
 
-/*const (
-	html string = `<!DOCTYPE html>
-	 <html>
-	 <head>
-	 <title>USER</title>
-	 </head>
-	 <body style="background:white">
-	 <img src = "%v" width=150 height=200/>> <p>hi,my name is <strong>%v</strong>,my country is china, i am a man,and i like sprots.</p>
-	 <ul style="font-size:20px">
-	 <li>Interests
-	 <ol style="color:red">
-	  <li>computer games</li> <li>football</li>
-	 <li>basketball</li>
-	  <li>...</li>
-	 </ol>
-	 </li>
-	 <li style="font-family:timesnewroman">Jobs
-	 <ul>
-	 <li>programming</li>
-	 </ul>
-	 </li>
-	 <li><em>Favorite</em> Quotes</li>
-	 <li>Where I've Lived</li>
-	 </ul>
-	 </body>
-	</html>`
-)*/
-
 func BasicRespon(c *web.Context) {
 	req := c.Req
 	w := c.Write
