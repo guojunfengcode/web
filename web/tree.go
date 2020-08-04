@@ -1,7 +1,6 @@
 package web
 
 import (
-	"log"
 	"strings"
 )
 
@@ -39,7 +38,6 @@ func (n *Node) Insert(pattern string, parts []string, height int) {
 
 	part := parts[height]
 	child := n.match(part)
-	log.Printf("Insert %v %v", part, child)
 	if child == nil {
 		child = &Node{
 			part:   part,

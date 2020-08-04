@@ -1,7 +1,6 @@
 package web
 
 import (
-	"log"
 	"net/http"
 	"strings"
 )
@@ -36,9 +35,7 @@ func ParsePattern(pattern string) []string {
 }
 
 func (r *Route) AddRoute(method string, path string, handler HandleFunc) {
-	log.Printf("Route %s - %s", method, path)
 	parts := ParsePattern(path)
-	log.Printf("AddRoute %v", parts)
 	key := method + "-" + path
 	_, ok := r.roots[method]
 	if !ok {
@@ -51,7 +48,7 @@ func (r *Route) AddRoute(method string, path string, handler HandleFunc) {
 
 func (r *Route) GetRoute(method string, path string) (*Node, map[string]string) {
 	searchParts := ParsePattern(path)
-	log.Println(searchParts)
+	//log.Println(searchParts)
 	params := make(map[string]string)
 	root, ok := r.roots[method]
 	if !ok {

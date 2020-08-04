@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -87,4 +88,27 @@ func (c *Context) StringFmt(code int, format string, values ...interface{}) {
 	c.SetHeader("Content-Type", "text/plain")
 	c.Statu(code)
 	c.Write.Write([]byte(fmt.Sprintf(format, values...)))
+}
+
+func (c *Context) HtmlFmt(code int, html string) {
+	uid := "33333333"
+	cookie := &http.Cookie{
+		Name:     "testuid",
+		Value:    uid,
+		Path:     "/html",
+		HttpOnly: false,
+		MaxAge:   100,
+	}
+	c.SetHeader("Content-Type", "text/html")
+	//http.SetCookie(c.Write, cookie)
+	c.SetCook(cookie)
+	c.Statu(code)
+	c.Write.Write([]byte(html))
+}
+
+func (c *Context) SetCook(cookie *http.Cookie) {
+	if v := cookie.String(); v != "" {
+		c.Write.Header().Add("Set-Cookie", v)
+		log.Printf("Set-Cookie: %v", v)
+	}
 }
